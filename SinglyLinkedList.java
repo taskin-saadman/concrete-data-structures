@@ -1,4 +1,4 @@
-import java.util.Iterator;
+import java.util.*;
 /**
  * A generic implementation of a Singly Linked List in Java.
  * Contains a private inner generic class {@code Node} containing properties each node.
@@ -62,10 +62,10 @@ public class SinglyLinkedList<T> implements Iterable<T> {
 
     /**
      * Clears the entire instance.
-     * Resets {@code head} to {@code null} and {@code size} to {@code 0}.
+     * Resets {@code head} to {@code null}, {@code tail} to {@code null} and {@code size} to {@code 0}.
      */
     public void clear() {
-        head = null; size = 0;
+        head = null; size = 0; tail = null;
     }
 
 
@@ -84,6 +84,29 @@ public class SinglyLinkedList<T> implements Iterable<T> {
     }
 
 
+
+    /**
+     * Removes the tail and returns it
+     * @return the tail Node's data
+     * @throws NoSuchElementException for empty SinglyLinkedLists
+     */
+    public T pop() {
+        if (size == 0) throw new NoSuchElementException("Can't pop() from and empty SinglyLinkedList.");
+        if (size == 1) { return this.removeHead(); }
+
+        Node current = head;
+        for (int i = 0; i < size - 2; i++) {    //advance upto Node prev to tail
+            current = current.getNext();
+        }
+
+        Node temp = tail;
+        current.setNext(null);
+        tail = current;     //update tail
+        size--;
+        return temp.getData();
+    }
+
+
     /**
      * Method to be overriden from Iterable<T> interface to make the collection traversible
      * through a for-each loop.
@@ -96,13 +119,12 @@ public class SinglyLinkedList<T> implements Iterable<T> {
 
             public boolean hasNext() { return currentNode != null; }    //since tail points to null
 
-            public T next() throws NoSuchElementException {
+            public T next() {
                 T retVal = currentNode.getData();
-                if (currentNode == null) throw new NoSuchElementException();    //full list is already traversed
                 currentNode = currentNode.getNext();    //advancing the iterator
                 return retVal;    
             }
-        }        
+        };     
     }
 
 
@@ -119,26 +141,10 @@ public class SinglyLinkedList<T> implements Iterable<T> {
         if (index == 0) return head.getData();
         if (index == size - 1) return tail.getData();
 
-        Node current = head.getNext();  //otherwise it's somewhere in the middle [O(n) complexity]
+        Node current = head;  //otherwise it's somewhere in the middle [O(n) complexity]
 
-        //traverse through the whole thing from Node position 1 upto the one in `index`
         for (int i = 1; i <= index; i++) current = current.getNext();
         return current.getData();
-    }
-
-
-    /**
-     * Sets the value of a Node in a specific index.
-     * Traverses the entire SinglyLinkedList until
-     * @param index the specific index.
-     * @param data the data to be set in that Node.
-     * @throws IndexOutOfBoundsException if out of bounds index was passed into the function.
-     */
-    public void set(int index, T data) throws IndexOutOfBoundsException {
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException("index should be between " + 0 + " & " + (size - 1));
-
-
-        
     }
 
 
@@ -150,17 +156,40 @@ public class SinglyLinkedList<T> implements Iterable<T> {
      * @see 
      */
     public void insert(int index, T data) throws IndexOutOfBoundsException {
-        if (index < 0 || index > size) throw new IndexOutOfBoundsException("index should be between " + 0 + " & " + (size - 1));
-        //if index is at last note, implement add()
-        if(index == size) this.add(data);
+        if (index < 0 || index > size) throw new IndexOutOfBoundsException("index should be between " + 0 + " & " + size);
+        if(index == size) { this.add(data); return; } //if index is next to last node, implement add()
+        if(index == 0) {this.addFirst(data); return;} //if index is 0, implement addFirst()
 
+        //if index is somewhere in the middle
         Node current = head;
         //reach upto the Node previous to the one in index
-        for (int i = 0; i < index; i++) current = current.getNext();
+        for (int i = 0; i < index - 1; i++) current = current.getNext();
         Node temp = current.getNext();  //store the previous next Node in the list
-        current.setNext(new Node(data));
-        current.getNext();
-        current.setNext(temp.getData());
+        current.setNext(new Node(data));    //set the new node
+        current = current.getNext();  //advance to the new node
+        current.setNext(temp);  //set the `next` of new node to temp
+        size++;
+    }
+
+
+    /**
+     * Remove the node at the specified index and return its value
+     * @param index the specific index
+     * @return the value at index
+     * @throws IndexOutOfBoundsException
+     */
+    public T remove(int index) throws IndexOutOfBoundsException {
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException("index should be between " + 0 + " & " + (size - 1));
+        if (index == 0) return this.removeHead();
+        if (index == size - 1) return this.pop();
+
+        //if removal is to be done somewhere in the middle
+        Node current = head; 
+        for(int i = 0; i <= index - 2; i++) current = current.getNext();
+        Node removalTemp = current.getNext();
+        current.setNext(removalTemp.getNext());
+        size--;
+        return removalTemp.getData();
     }
 
 
@@ -180,8 +209,12 @@ public class SinglyLinkedList<T> implements Iterable<T> {
     /**
      * Returns the head node's data
      * @return data
+     * @throws NoSuchElementException if list is empty
      */
-    public T getHead() {return head.getData();}
+    public T getHead() throws NoSuchElementException {
+        if (size == 0) throw new NoSuchElementException();
+        return head.getData();
+    }
 
 
     /**

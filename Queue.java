@@ -48,6 +48,16 @@ public class Queue<T> implements Iterable<T> {
         return queue.size() == 0;
     }
 
+
+    /**
+     * Returns the size of the Queue.
+     * 
+     * @return size
+     */
+    public int size() {
+        return queue.size();
+    }
+
     /**
      * Returns an iterator over the elements in the queue in FIFO order (front to rear).
      * The iterator starts from the front of the queue and moves toward the rear.

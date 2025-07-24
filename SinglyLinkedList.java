@@ -200,8 +200,8 @@ public class SinglyLinkedList<T> implements Iterable<T> {
      */
     public int indexOf(T value) {
         int index = 0;
-        for (T item : this) {   //equality checj
-            if (item.equals(value)) return index;
+        for (T item : this) {   //equality check for both null and non-null elements
+            if ((value == null && item == null) || (item != null && item.equals(value))) return index;
             index++;
         }
         return -1;

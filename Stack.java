@@ -106,29 +106,5 @@ public class Stack<T> implements Iterable<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        return new Iterator<T>() {
-            int i = stack.size() - 1;   //start from last element
-            
-            /**
-             * Returns {@code true} if the iteration has more elements.
-             * 
-             * @return {@code true} if there are more elements to iterate over
-             */
-            public boolean hasNext() {
-                return i >= 0;
-            }
-
-            /**
-             * Returns the next element in the iteration.
-             * Elements are returned in LIFO order (top to bottom).
-             * 
-             * @return the next element in the iteration
-             * @throws NoSuchElementException if there are no more elements to iterate over
-             */
-            public T next() throws NoSuchElementException {
-                if (i < 0) throw new NoSuchElementException("Already traversed till the bottom of the Stack.");
-                return stack.get(i--);
-            }
-        };
-    }
+        return stack.iterator();    //use List's built-in iterator()
 }

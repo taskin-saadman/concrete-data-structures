@@ -65,7 +65,7 @@ public class SinglyLinkedList<T> implements Iterable<T> {
      * Resets {@code head} to {@code null}, {@code tail} to {@code null} and {@code size} to {@code 0}.
      */
     public void clear() {
-        head = null; size = 0; tail = null;
+        head = tail = null; size = 0;
     }
 
 
@@ -178,7 +178,7 @@ public class SinglyLinkedList<T> implements Iterable<T> {
      * @return the value at index
      * @throws IndexOutOfBoundsException
      */
-    public T remove(int index) throws IndexOutOfBoundsException {
+    public T removeAt(int index) throws IndexOutOfBoundsException {
         if (index < 0 || index >= size) throw new IndexOutOfBoundsException("index should be between " + 0 + " & " + (size - 1));
         if (index == 0) return this.removeHead();
         if (index == size - 1) return this.pop();
@@ -191,6 +191,21 @@ public class SinglyLinkedList<T> implements Iterable<T> {
         size--;
         return removalTemp.getData();
     }
+
+
+    /**
+     * Finds the index for the first instance of a particular value in the SinglyLinkedList.
+     * @param value the value whose index is to be found
+     * @return index the valute of the index. If value doesn't exist return -1.
+     */
+    public int indexOf(T value) {
+        int index = 0;
+        for (T item : this) {   //equality checj
+            if (item.equals(value)) return index;
+            index++;
+    }
+    return -1;
+}
 
 
 

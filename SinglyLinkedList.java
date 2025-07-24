@@ -203,9 +203,9 @@ public class SinglyLinkedList<T> implements Iterable<T> {
         for (T item : this) {   //equality checj
             if (item.equals(value)) return index;
             index++;
+        }
+        return -1;
     }
-    return -1;
-}
 
 
 

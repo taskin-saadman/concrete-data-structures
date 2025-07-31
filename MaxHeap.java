@@ -1,17 +1,17 @@
 import java.util.ArrayList;
 /**
- * A generic custom implementation of the MinHeap Priority Queue using {@code java.util.ArrayList}.
+ * A generic custom implementation of the MaxHeap Priority Queue using {@code java.util.ArrayList}.
  * Implements {@code java.lang.Comparable} to compare generic elements using natural order.
  * @author Taskin Saadman
  */
-public class MinHeap<T extends Comparable<T>> {
+public class MaxHeap<T extends Comparable<T>> {
     private ArrayList<T> heap;
 
     /**
      * Constructs an empty heap using an ArrayList
      * @see java.util.ArrayList
      */
-    public MinHeap() {
+    public MaxHeap() {
         heap = new ArrayList<T>();
     }
 
@@ -53,7 +53,7 @@ public class MinHeap<T extends Comparable<T>> {
     /**
      * Pops the value at the root and returns it.
      * Runs heapify down procedure until heap property satisfied.
-     * @return the element at the root of the MinHeap
+     * @return the element at the root of the MaxHeap
      * @throws RuntimeException if heap is empty
      */
     public T poll() throws RuntimeException {
@@ -115,7 +115,7 @@ public class MinHeap<T extends Comparable<T>> {
      * Returns the index of the left child of the current node
      * @param index current node's index
      * @return the index of the left child
-     * @throws RunTimeError when right child does not exist
+     * @throws RuntimeException when left child does not exist
      */
     private int getLeftChild(int index) {
         if (2 * index + 1 > heap.size() - 1) throw new RuntimeException("No left child");
@@ -126,7 +126,7 @@ public class MinHeap<T extends Comparable<T>> {
      * Returns the index of the right child of the current node
      * @param index current node's index
      * @return the index of the right child
-     * @throws RunTimeError when right child does not exist
+     * @throws RuntimeException when right child does not exist
      */
     private int getRightChild(int index) {
         if (2 * index + 2 > heap.size() - 1) throw new RuntimeException("No right child");
@@ -158,7 +158,7 @@ public class MinHeap<T extends Comparable<T>> {
             int parentIndex = (i - 1) / 2;
             
             //if heap property is satisfied, break
-            if (heap.get(parentIndex).compareTo(heap.get(i)) <= 0) {
+            if (heap.get(parentIndex).compareTo(heap.get(i)) >= 0) {
                 break;
             }
                         
@@ -175,26 +175,26 @@ public class MinHeap<T extends Comparable<T>> {
      */
     private void bubbleDown(int i) {
        while(true) {
-           int smallestIndex = i;
+           int largestIndex = i;
            int leftChild = 2 * i + 1;
            int rightChild = 2 * i + 2;
 
            //compare with left child
-           if (leftChild < heap.size() && heap.get(leftChild).compareTo(heap.get(smallestIndex)) < 0) {
-               smallestIndex = leftChild;
+           if (leftChild < heap.size() && heap.get(leftChild).compareTo(heap.get(largestIndex)) > 0) {
+               largestIndex = leftChild;
            }
 
            //compare with right child
-           if (rightChild < heap.size() && heap.get(rightChild).compareTo(heap.get(smallestIndex)) < 0) {
-               smallestIndex = rightChild;
+           if (rightChild < heap.size() && heap.get(rightChild).compareTo(heap.get(largestIndex)) > 0) {
+               largestIndex = rightChild;
            }
 
            //if heap property is satisfied, break
-           if (smallestIndex == i) break;
+           if (largestIndex == i) break;
 
-           //swap with the smaller child and continue
-           swap(i, smallestIndex);
-           i = smallestIndex;
+           //swap with the larger child and continue
+           swap(i, largestIndex);
+           i = largestIndex;
        }
     }
 

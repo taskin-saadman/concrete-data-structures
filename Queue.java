@@ -66,28 +66,7 @@ public class Queue<T> implements Iterable<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        return new Iterator<T>() {
-            int i = 0;
-            
-            /**
-             * Returns {@code true} if the iteration has more elements.
-             * 
-             * @return {@code true} if there are more elements to iterate over
-             */
-            public boolean hasNext() {
-                return i <= (queue.size() - 1);
-            }
-            
-            /**
-             * Returns the next element in the iteration.
-             * Elements are returned in FIFO order (front to rear).
-             * 
-             * @return the next element in the iteration
-             */
-            public T next() {
-                return queue.get(i++);
-            }
-        };
+        return queue.iterator();  //List's built-in iterator
     }
 
 }
